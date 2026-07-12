@@ -1,0 +1,311 @@
+{
+  "cover": {
+    "words": ["WEST", "COAST", "BEACH"],
+    "photo": "oxnard/oxnard.sky.png"
+  },
+  "meta": {
+    "organization": "Funny Ones",
+    "category": "Small Group Journeys",
+    "contact": {
+      "name": "Funny Ones",
+      "phone": "",
+      "email": ""
+    }
+  },
+  "trip": {
+    "title": "Oxnard",
+    "subtitle": "California Beach Weekend",
+    "duration": "4 Days",
+    "groupSize": "4 Guests",
+    "dates": "Wednesday–Sunday, July 22–26, 2026",
+    "intro": "Sixty miles northwest of Los Angeles, the seaside city of Oxnard sits where the Santa Clara River meets the Pacific — a working port town with wide sandy beaches and a vibrant harbor full of seals and sailboats.",
+    "highlights": [
+      "Kentfield travelers: depart through the Marin hills, fuel up at the famed Patterson Starbucks on I-5, and let the highway carry you south to the Los Angeles Basin",
+      "Los Angeles travelers: depart Northridge via the Harbour Freight Parking Lot Starbucks  and head west on US-101 to the Oxnard coast",
+      "Afternoon surf lessons at Ventura Beach Surfschool",
+      "Nurts !",
+      "Kayak the calm channels of Channel Islands Harbor alongside harbor seals and sea lions",
+      "Beachside breakfast at Hollywood Beach Cafe — Channel Islands burritos, avocado toast, and morning mimosas steps from the sand"
+    ],
+    "photos": {
+      "hero": "https://upload.wikimedia.org/wikipedia/commons/b/be/CI_Harbor_Panorama_%28cropped%29.jpg",
+      "secondary": "https://upload.wikimedia.org/wikipedia/commons/f/f2/CI-Harbor-scene.jpg",
+      "heroCaption": "Channel Islands Harbor, Oxnard",
+      "secondaryCaption": "Boats at Channel Islands Harbor"
+    }
+  },
+  "route": {
+    "nodes": [
+      { "id": "kentfield",   "label": "Kentfield",   "x": 68,  "y": 28  },
+      { "id": "patterson",   "label": "Patterson",   "x": 162, "y": 95  },
+      { "id": "oxnard",      "label": "Oxnard",      "x": 78,  "y": 178 },
+      { "id": "north_ridge", "label": "Los Angeles", "x": 210, "y": 40, "dx": -74, "dy": -3 },
+      { "id": "harbourFreight",   "label": "Harbour Freight",   "x": 162, "y": 95  }
+    ],
+    "edges": [
+      { "from": "kentfield",   "to": "patterson", "label": "I-5 South",    "type": "highway" },
+      { "from": "patterson",   "to": "harbourFreight",    "label": "Hwy 126 West", "type": "highway" },
+      { "from": "north_ridge", "to": "harbourFreight",    "label": "Parking Lot",  "type": "parkinglot" },
+      { "from": "harbourFreight", "to": "oxnard",    "label": "US-101 West",  "type": "highway" }
+      
+    ],
+    "routes": [
+      { "title": "Kentfield-based travelers",  "path": ["kentfield", "patterson", "oxnard"] },
+      { "title": "Traveling from Los Angeles",  "path": ["north_ridge", "harbourFreight", "oxnard"] }
+    ]
+  },
+  "accommodation": {
+    "name": "Oxnard Shores",
+    "intro": "On the dunes",
+    "tagline": "The Perfect Spot",
+    "address": "1531 Mandalay Beach Rd, Oxnard, CA, 93035",
+    "description": "",
+    "nights": 3,
+    "photo": "oxnard/oxnard.approach.png"
+  },
+  "days": [
+    {
+      "number": 1,
+      "date": "Wednesday, July 22",
+      "sidebar": [{ "name": "accommodation", "title": "Where You'll Stay" }],
+      "photos": [
+        { "src": "oxnard/oxnard.outside.png", "caption": "Oxnard Shores, first look" }
+      ],
+      "stops": [
+        {
+          "title": "DEPART KENTFIELD",
+          "subtitle": "HEADING SOUTH",
+          "description": "Head south through the Marin hills, cross the Bay, and pick up I-5 South through the Central Valley — fuel stop at the famed Patterson Starbucks along the way. Los Angeles travelers depart Northridge and head west on US-101.",
+          "note": "Kentfield: approx. 370 miles · 5 hr 30 min via US-101 and I-5 South"
+        },
+        {
+          "title": "DEPART NORTHRIDGE",
+          "subtitle": "HEADING WEST",
+          "description": "Head north through the Parking Lot — fuel stop at the famed Harbor Freight Starbucks along the way. Then head west on US-101.",
+          "note": "Los Angeles: approx. 40 miles · 1 hr via US-101 West"
+        },
+        {
+          "title": "EXPLORE",
+          "subtitle": "OXNARD",
+          "description": "Get adventurous and try to get to town on bikes",
+          "note": "approx. 1.1 miles to down"
+        },
+        {
+          "title": "DINNER",
+          "subtitle": "SETTLING IN",
+          "description": "If we make it town... Topper's Pizza  ?",
+          "meals": "D"
+        },
+        {
+          "title": "BUTTERCUPS COOL TREATS",
+          "subtitle": "great selection of frozen yogurt",
+          "description": "",
+          "meals": "B"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "date": "Thursday, July 23",
+      "sidebar": [{ "name": "day_2_side", "title": "Where You'll Be", "intro": "Oxnard's secrets:" }],
+      "photos": [
+        { "src": "https://upload.wikimedia.org/wikipedia/commons/f/f2/CI-Harbor-scene.jpg", "caption": "Downtown Oxnard and the harbor" }
+      ],
+      "stops": [
+        {
+          "title": "HOLLYWOOD BEACH CAFE",
+          "subtitle": "BREAKFAST ON THE SAND",
+          "description": "Steps from the water, this local favorite sets the tone for the day — casual, beachside, and reliably good. Order the Channel Islands breakfast burrito or the huevos rancheros. The full bar handles morning mimosas without hesitation.",
+          "meals": "B"
+        },
+        {
+          "title": "SEE BEE MUSEUM",
+          "subtitle": "HISTORY EXPLORATION",
+          "description": "The official museum dedicated to the history of the U.S. Navy’s Construction Battalions, famously known as the \"Seabees.\""
+          
+        },
+        {
+          "title": "WINE TASTING",
+          "subtitle": "LOCAL STUFF",
+          "description": "Oxnard has some industrial wine tasting rooms. You'll check some out"
+          
+        },
+        {
+          "title": "SMOKIN JAYS",
+          "subtitle": "counter service",
+          "description": "Hot chicken sliders, brisket, and mac and cheese",
+          "meals": "B"
+        },
+        {
+          "title": "URBANE CAFE",
+          "subtitle": "LOCALLY FOUNDED",
+          "description": "a fantastic go-to for incredibly fresh, large entrée salads",
+          "meals": "B"
+        },
+        {
+          "title": "MENCHIES FROZEN YOGURT",
+          "subtitle": "familiar, reliable self-serve frozen yogurt experience",
+          "description": "Situated in the bustling shopping district at The Collection at RiverPark",
+          "meals": "B"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "date": "Friday, July 24",
+      "sidebar": [{ "name": "day_3_side", "title": "Where You'll Be" }],
+      "photos": [
+        { "src": "oxnard/oxnard.sky.png", "caption": "Ventura Beach, just up the coast" }
+      ],
+      "stops": [
+        {
+          "title": "HOLLYWOOD BEACH CAFE",
+          "subtitle": "BREAKFAST ON THE SAND",
+          "description": "Steps from the water, this local favorite sets the tone for the day — casual, beachside, and reliably good. Order the Channel Islands breakfast burrito or the huevos rancheros. The full bar handles morning mimosas without hesitation.",
+          "meals": "B"
+        },
+        {
+          "title": "CARD PLAYING",
+          "subtitle": "FEEL THE TENSION",
+          "description": "So-called relaxation",
+          "meals": "B"
+        },
+        {
+          "title": "VENTURA BEACH",
+          "subtitle": "SURF LESSONS",
+          "description": "Learn to surf with a dude dad talked to on the phone. \"it's all there, for sure\"",
+          "activity": {
+            "distance": "10 miles north",
+            "elevation": "Best spot in SoCal man",
+            "difficulty": "Easy for the kids. Impossible for the adults."
+          }
+        },
+        {
+          "title": "CABO SEAFOOD CANTINA",
+          "subtitle": "LOCAL FAVE - 4.5 miles from house",
+          "description": "Freshly made tableside guacamole and handmade tortillas",
+          "meals": "B"
+        },
+        {
+            "title": "LAZY DOG RESTAURANT",
+          "subtitle": "in The Colleciton center",
+          "description": "They offer massive, multi-ingredient dinner salads alongside a diverse comfort-food menu.",
+          "meals": "B"
+        },
+        {
+          "title": "MICHOACANITA ICE CREAM COMPANY",
+          "subtitle": "A LITTLE SOMETHING DIFFERENT ?",
+          "description": "local shop offers a massive variety of traditional frozen treats and ice creams made with fresh ingredients.",
+          "meals": "B"
+        }
+        
+      ]
+    },
+    {
+      "number": 4,
+      "date": "Saturday, July 25",
+      "sidebar": [{ "name": "restaurants_1", "title": "Where You'll Eat", "intro": "Oxnard's best tables:" }],
+      "photos": [
+        { "src": "https://upload.wikimedia.org/wikipedia/commons/b/be/CI_Harbor_Panorama_%28cropped%29.jpg", "caption": "Channel Islands Harbor, Oxnard", "height": "3.0in" },
+        { "src": "https://upload.wikimedia.org/wikipedia/commons/f/f2/CI-Harbor-scene.jpg", "caption": "Boats at Channel Islands Harbor", "height": "2.6in" }
+      ],
+      "stops": [
+        {
+          "title": "MRS. OLSON'S RESTAURANT",
+          "subtitle": "BREAKFAST AT THE HARBOR",
+          "description": "A harbor institution since 1974, Mrs. Olson's earns its reputation through massive portions and panoramic marina views. The omelets are legendary. Open until 4:00 PM on Saturdays — no need to rush.",
+          "meals": "B"
+        },
+        {
+          "title": "CHANNEL ISLANDS HARBOR",
+          "subtitle": "ANOTHER DAY ON THE WATER",
+          "description": "Return to the harbor for more exploration — more kayaking, more seals, or simply a long walk along the waterfront. The afternoon arrives at its own pace.",
+          "meals": "D"
+        },
+        {
+          "title": "CARD PLAYING",
+          "subtitle": "FEEL THE TENSION",
+          "description": "So-called relaxation",
+          "meals": "B"
+        },
+        {
+          "title": "GREEN OLIVE",
+          "subtitle": "MEDITERRANEAN BOWLS AND SALADS",
+          "description": "Downtown spot",
+          "meals": "B"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "date": "Sunday, July 26",
+      "sidebar": ["transport"],
+      "photos": [
+        { "src": "oxnard/oxnard.livingWhale.png", "caption": "One last look before the drive home" }
+      ],
+      "stops": [
+        {
+          "title": "DEPART OXNARD",
+          "subtitle": "HEADING HOME",
+          "description": "One final morning at the coast before the drive back. We'll re-visit a fave breakfast place or flail looking for a good pastry to take with.",
+          "note": "NYC: approx. 2800 miles. Kentfield: approx. 370 miles · 5 hr 30 min via Hwy 126 East and I-5 North. Northridge: don't even tell me it's so close"
+        }
+      ]
+    }
+  ],
+  "transport": [
+    {
+        "id": "Transportation",
+        "tagline": "Driving or sitting in LAX",
+        "description": "Somehow we get Jackson to LAX and Marin folk head north. Presumably stopping a bunch to pee"
+    }
+  ],
+  "day_2_side": [
+    {
+      "id": "hollywood_beach_cafe",
+      "name": "Hollywood Beach Cafe",
+      "tagline": "Beachside diner steps from the sand",
+      "meal": "Breakfast · Days 2 & 3",
+      "description": "A local favorite just steps from the water, offering a casual beachside diner vibe perfect for a relaxed morning. Features a full bar for morning mimosas and excellent coffee. Closes at 3:00 PM.",
+      "signature": ["Channel Islands breakfast burrito", "Classic avocado toast", "Huevos rancheros", "Morning mimosas"],
+      "photo": null
+    },
+    {
+        "id": "seebee",
+        "name": "See-bee Museum",
+        "description": "The museum offers a deeply immersive look into a unique branch of military history, combining heavy engineering with combat readiness."
+    },
+    {
+        "id": "StreyCellars",
+        "name": "Strey Cellars",
+        "description": "A Ventura County Winery and Tasting Room experience like no other, with a fun and welcoming atmosphere accented by nothing less than great wine!"
+    }
+   ],
+  "day_3_side": [
+    {
+      "id": "hollywood_beach_cafe",
+      "name": "Hollywood Beach Cafe",
+      "tagline": "Beachside diner steps from the sand",
+      "meal": "Breakfast · Days 2 & 3",
+      "description": "A local favorite just steps from the water, offering a casual beachside diner vibe perfect for a relaxed morning. Features a full bar for morning mimosas and excellent coffee. Closes at 3:00 PM.",
+      "signature": ["Channel Islands breakfast burrito", "Classic avocado toast", "Huevos rancheros", "Morning mimosas"],
+      "photo": null
+    },
+    {
+        "id": "VenturaBeach",
+        "name": "Ventura Beach",
+        "description": "A local fave for learning to surf."
+    }
+   ],
+  "restaurants_2": [
+    {
+      "id": "mrs_olsons",
+      "name": "Mrs. Olson's Restaurant",
+      "tagline": "Harbor institution since 1974",
+      "meal": "Breakfast · Days 2 & 3",
+      "description": "A staple of the Oxnard harbor area for over fifty years, famous for massive portions, classic harbor-side charm, and panoramic marina views. Hearty American breakfast classics are the draw — enormous omelets, scrambles, and diner favorites. Stays open until 4:00 PM on Saturdays.",
+      "signature": ["Massive omelets", "Classic scrambles", "Hearty American breakfast", "Marina views"],
+      "photo": null
+    }
+  ]
+}

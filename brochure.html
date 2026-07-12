@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Travel Brochure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <script src="trip-data.js"></script>
+
+  <style>
+    /* ── Reset ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Design tokens ──────────────────────────────────── */
+    :root {
+      --cream:    #F3EDE2;
+      --dark:     #2B1E12;
+      --terra:    #C4481A;
+      --rule:     #C2AD90;
+      --mid:      #7B6248;
+      --page-w:   8.5in;
+      --page-h:   11in;
+      --mx:       0.52in;   /* outer horizontal margin */
+    }
+
+    /* ── Screen wrapper ─────────────────────────────────── */
+    body {
+      background: #BFB8AE;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* ── Page shell ─────────────────────────────────────── */
+    .page {
+      width:    var(--page-w);
+      height:   var(--page-h);
+      background: var(--cream);
+      overflow: hidden;
+      position: relative;
+      margin:   20px auto;
+      font-family: 'EB Garamond', Georgia, serif;
+      color: var(--dark);
+      font-size: 13.5px;
+    }
+
+    @media print {
+      body { background: none; }
+      .page { margin: 0; page-break-after: always; }
+      @page { size: letter; margin: 0; }
+    }
+
+    /* ── Header stripe (both pages) ─────────────────────── */
+    .stripe {
+      height: 42px;
+      border-bottom: 1.5px solid var(--dark);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--mx);
+      gap: 14px;
+    }
+    .stripe-rule { flex: 1; border-top: 0.5px solid var(--dark); }
+    .stripe-text {
+      font-family: system-ui, sans-serif;
+      font-size: 7.5px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ── Utility ─────────────────────────────────────────── */
+    .rule { border: none; border-top: 0.75px solid var(--rule); margin: 5px 0; }
+
+    /* ── Print pagination ───────────────────────────────────── */
+    @media print {
+      .stop-block   { break-inside: avoid; }
+      .day-block    { break-inside: avoid; }
+      .property     { break-inside: avoid; }
+    }
+
+    .kicker {
+      font-family: system-ui, sans-serif;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+
+    /* ════════════════════════════════════════════════════════
+       PAGE 1 — OVERVIEW
+    ════════════════════════════════════════════════════════ */
+
+    /* Overview page shell — top box shrinks to its actual content,
+       bottom box (photo + route maps) takes whatever height is left. */
+    .page-overview {
+      display: flex;
+      flex-direction: column;
+    }
+    .page-overview .stripe { flex: 0 0 auto; }
+
+    /* Top content split */
+    .overview-top {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      flex: 0 0 auto;
+      padding: 0.38in var(--mx) 0.28in;
+      gap: 0;
+    }
+
+    .ov-left {
+      padding-right: 0.3in;
+      border-right: 0.75px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ov-right {
+      padding-left: 0.3in;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .display-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 60px;
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.22in;
+    }
+
+    .intro-text {
+      font-size: 14px;
+      line-height: 1.58;
+      color: var(--dark);
+    }
+
+    .trip-meta {
+      font-family: system-ui, sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .trip-meta .pipe { color: var(--rule); margin: 0 8px; }
+
+    .trip-dates {
+      font-family: 'EB Garamond', serif;
+      font-size: 14.5px;
+      color: var(--mid);
+      margin-bottom: 0.22in;
+    }
+
+    .hi-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.12in;
+    }
+    .hi-icon  { color: var(--terra); font-size: 13px; }
+    .hi-label {
+      font-family: system-ui, sans-serif;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--terra);
+    }
+
+    .hi-item {
+      font-size: 12px;
+      line-height: 1.42;
+      color: var(--terra);
+      padding: 4px 0;
+    }
+
+    /* Bottom: photo + map — fills whatever height overview-top didn't use */
+    .overview-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      flex: 1 1 auto;
+      min-height: 0;
+      border-top: 0.75px solid var(--rule);
+    }
+
+    .ov-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .map-wrap {
+      padding: 0.32in var(--mx) 0.32in 0.32in;
+      display: flex;
+      flex-direction: column;
+      border-left: 0.75px solid var(--rule);
+    }
+    .map-kicker { margin-bottom: 0.14in; }
+
+    .route-maps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.16in;
+    }
+    .route-map-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .route-map-title {
+      font-family: system-ui, sans-serif;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 3px;
+    }
+    .route-map-item svg {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 280 / 210;
+    }
+
+
+    /* ════════════════════════════════════════════════════════
+       PAGE 2 — ITINERARY
+    ════════════════════════════════════════════════════════ */
+
+    .itin-body {
+      display: grid;
+      grid-template-columns: 2.5fr 1.55fr 2.0fr;
+      height: calc(var(--page-h) - 42px);
+      overflow: hidden;
+    }
+
+    /* Left — day-by-day */
+    .col-days {
+      padding: 0.32in 0.3in 0.3in var(--mx);
+      border-right: 0.75px solid var(--rule);
+      overflow: hidden;
+    }
+
+    .day-block { margin-bottom: 0.13in; }
+    .day-block + .day-block {
+      padding-top: 0.13in;
+      border-top: 0.75px solid var(--rule);
+    }
+
+    .day-label {
+      font-family: system-ui, sans-serif;
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 2px;
+    }
+
+    .stop-block { margin-bottom: 0.12in; }
+
+    .stop-title {
+      font-family: system-ui, sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dark);
+      margin-bottom: 1px;
+    }
+
+    .stop-subtitle {
+      font-family: system-ui, sans-serif;
+      font-size: 7.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 7px;
+    }
+
+    .stop-text {
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--dark);
+    }
+
+    .stop-note {
+      font-size: 10.5px;
+      color: var(--mid);
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    .accomm-line {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 6px;
+    }
+    .accomm-icon { color: var(--terra); font-size: 11px; }
+    .accomm-text { font-size: 11px; color: var(--dark); }
+
+    .activity-stats {
+      display: flex;
+      gap: 14px;
+      margin-top: 7px;
+    }
+    .stat-label {
+      font-family: system-ui, sans-serif;
+      font-size: 7px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .stat-value { font-size: 12px; color: var(--dark); }
+
+    /* Middle — photos + CTA */
+    .col-photos {
+      padding: 0.3in 0.26in;
+      border-right: 0.75px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+      gap: 0.14in;
+    }
+
+    .col-photo-img {
+      width: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-caption {
+      font-size: 9.5px;
+      color: var(--mid);
+      font-style: italic;
+      margin-top: -0.09in;
+    }
+
+    .ready-box {
+      background: var(--dark);
+      color: var(--cream);
+      padding: 0.2in 0.18in;
+      text-align: center;
+      margin-top: auto;
+    }
+    .ready-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 9px;
+    }
+    .ready-body {
+      font-size: 10.5px;
+      line-height: 1.5;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+    .ready-contact {
+      font-family: system-ui, sans-serif;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: #D4956E;
+    }
+
+    /* Right — Where you'll stay */
+    .col-sidebar {
+      padding: 0.32in var(--mx) 0.3in 0.28in;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 0.1in;
+    }
+    .sidebar-icon  { color: var(--terra); font-size: 12px; }
+    .sidebar-title {
+      font-family: system-ui, sans-serif;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terra);
+    }
+
+    .sidebar-intro {
+      font-size: 11.5px;
+      color: var(--mid);
+      font-style: italic;
+      margin-bottom: 0.11in;
+    }
+
+    .property { margin-bottom: 0.11in; }
+
+    .prop-name {
+      font-family: system-ui, sans-serif;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dark);
+    }
+    .prop-tagline {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 11.5px;
+      color: var(--mid);
+      display: block;
+      margin: 2px 0 5px;
+    }
+    .prop-text {
+      font-size: 11.5px;
+      line-height: 1.47;
+      color: var(--dark);
+    }
+    .prop-signature {
+      font-size: 10.5px;
+      color: var(--mid);
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    .prop-photo {
+      width: 100%;
+      height: 1.05in;
+      object-fit: cover;
+      display: block;
+      margin: 7px 0;
+    }
+
+    /* ── Day page heading (top of left col on each itinerary page) ── */
+    .day-pg-heading { margin-bottom: 0.12in; }
+
+    .day-pg-num {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--dark);
+    }
+
+    .day-pg-date {
+      font-family: system-ui, sans-serif;
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-top: 3px;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       PAGE 0 — COVER
+    ════════════════════════════════════════════════════════ */
+    .page-cover { position: relative; }
+
+    .cover-word {
+      position: absolute;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0 0.28in;
+      z-index: 1;         /* default: behind photo */
+    }
+
+    .cover-word span {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.62in;
+      font-weight: 400;
+      line-height: 0.88;
+      color: var(--dark);
+      display: block;
+    }
+
+    /* Row 1 — above photo */
+    .cover-top    { top: 0.42in; }
+
+    /* Row 2 — overlaps photo, sits BEHIND it */
+    .cover-middle { top: 5.05in; z-index: 1; }
+
+    /* Row 3 — below photo */
+    .cover-bottom { bottom: 0.38in; }
+
+    /* Photo frame sits in front of middle word */
+    .cover-photo-frame {
+      position: absolute;
+      left: 50%;
+      top: 2.42in;
+      transform: translateX(-50%);
+      width: 4.82in;
+      height: 6.12in;
+      z-index: 2;
+      overflow: hidden;
+      opacity: 0.82;
+    }
+
+    .cover-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    /* Placeholder when photo missing */
+    .cover-photo-frame .photo-placeholder {
+      width: 100%; height: 100%;
+      background: #D8CFC4;
+    }
+
+    .cover-page-num {
+      position: absolute;
+      bottom: 0.18in;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'EB Garamond', serif;
+      font-size: 11px;
+      color: var(--dark);
+    }
+
+  </style>
+</head>
+<body>
+<div id="brochure"></div>
+
+<script>
+/* ──────────────────────────────────────────────────────────
+   Page 0 — Cover
+────────────────────────────────────────────────────────── */
+function buildCoverPage(d) {
+  const cov = d.cover;
+  const words = cov.words;   // e.g. ["TWENTY", "FOUR", "YEARS"]
+
+  function letterSpans(word) {
+    return word.split('').map(l => `<span>${l}</span>`).join('');
+  }
+
+  const photoInner = cov.photo
+    ? `<img src="${cov.photo}" alt="Cover photo"
+            onerror="this.parentElement.innerHTML='<div class=\\'photo-placeholder\\'></div>'">`
+    : `<div class="photo-placeholder"></div>`;
+
+  return `
+  <div class="page page-cover">
+
+    <div class="stripe">
+      <div class="stripe-rule"></div>
+      <div class="stripe-text">${d.meta.category}</div>
+      <div class="stripe-rule"></div>
+    </div>
+
+    <!-- Row 1 -->
+    <div class="cover-word cover-top">
+      ${letterSpans(words[0])}
+    </div>
+
+    <!-- Row 2: behind photo -->
+    <div class="cover-word cover-middle">
+      ${letterSpans(words[1])}
+    </div>
+
+    <!-- Photo frame: in front of row 2 -->
+    <div class="cover-photo-frame">
+      ${photoInner}
+    </div>
+
+    <!-- Row 3 -->
+    <div class="cover-word cover-bottom">
+      ${letterSpans(words[2])}
+    </div>
+
+    <div class="cover-page-num">1</div>
+  </div>`;
+}
+
+/* ──────────────────────────────────────────────────────────
+   SVG Route Maps — fully data-driven from a graph of
+   { nodes, edges, routes } in the trip JSON. Each entry in
+   `routes` is an ordered walk over node ids and renders as
+   its own small map (e.g. one per point of origin).
+────────────────────────────────────────────────────────── */
+const MAP_VIEWBOX     = { w: 280, h: 210 };
+const MAP_DEFAULT_LINE = { x1: 24, y1: 178, x2: 232, y2: 40 }; // fallback diagonal when a node has no x/y
+
+// Fill in x/y for any node missing coordinates by interpolating
+// between whichever neighboring nodes in the path *do* have them
+// (or along a default diagonal if none in the path do).
+function resolveRoutePoints(path, nodesById) {
+  const raw = path.map(id => {
+    const n = nodesById[id];
+    if (!n) throw new Error(`Route references unknown node "${id}"`);
+    return n;
+  });
+
+  const anchors = [];
+  raw.forEach((n, i) => { if (n.x !== undefined && n.y !== undefined) anchors.push(i); });
+
+  const positionAt = (i) => {
+    if (anchors.length === 0) {
+      const t = raw.length === 1 ? 0 : i / (raw.length - 1);
+      return {
+        x: MAP_DEFAULT_LINE.x1 + (MAP_DEFAULT_LINE.x2 - MAP_DEFAULT_LINE.x1) * t,
+        y: MAP_DEFAULT_LINE.y1 + (MAP_DEFAULT_LINE.y2 - MAP_DEFAULT_LINE.y1) * t
+      };
+    }
+    const before = anchors.filter(a => a <= i).pop();
+    const after  = anchors.find(a => a >= i);
+    if (before === undefined) return { x: raw[after].x,  y: raw[after].y };
+    if (after === undefined)  return { x: raw[before].x, y: raw[before].y };
+    if (before === after)     return { x: raw[before].x, y: raw[before].y };
+    const t = (i - before) / (after - before);
+    return {
+      x: raw[before].x + (raw[after].x - raw[before].x) * t,
+      y: raw[before].y + (raw[after].y - raw[before].y) * t
+    };
+  };
+
+  return raw.map((n, i) => {
+    const pos = (n.x !== undefined && n.y !== undefined) ? { x: n.x, y: n.y } : positionAt(i);
+    return { id: n.id, label: n.label, dx: n.dx, dy: n.dy, x: pos.x, y: pos.y };
+  });
+}
+
+function findEdge(edges, fromId, toId) {
+  return edges.find(e =>
+    (e.from === fromId && e.to === toId) || (e.from === toId && e.to === fromId)
+  ) || {};
+}
+
+function buildRouteMapSVG(route, graph) {
+  const nodesById = Object.fromEntries(graph.nodes.map(n => [n.id, n]));
+  const pts   = resolveRoutePoints(route.path, nodesById);
+  const edges = graph.edges || [];
+
+  const pathsHTML = pts.slice(0, -1).map((p1, i) => {
+    const p2   = pts[i + 1];
+    const edge = findEdge(edges, p1.id, p2.id);
+    const dash = edge.type === 'scenic' ? ' stroke-dasharray="5,3"' : '';
+    return `<path d="M ${p1.x},${p1.y} L ${p2.x},${p2.y}"
+      stroke="#2B1E12" stroke-width="1.6" fill="none"${dash}/>`;
+  }).join('\n');
+
+  const legLabelsHTML = pts.slice(0, -1).map((p1, i) => {
+    const p2   = pts[i + 1];
+    const edge = findEdge(edges, p1.id, p2.id);
+    if (!edge.label) return '';
+    const mx = (((p1.x + p2.x) / 2) - 18).toFixed(0);
+    const my = (((p1.y + p2.y) / 2) - 7).toFixed(0);
+    return `<text x="${mx}" y="${my}" font-family="system-ui,sans-serif"
+      font-size="6.5" fill="#7B6248">${edge.label}</text>`;
+  }).join('\n');
+
+  const stopsHTML = pts.map(pt => {
+    const dx = pt.dx !== undefined ? pt.dx : 10;
+    const dy = pt.dy !== undefined ? pt.dy : -3;
+    return `
+    <circle cx="${pt.x}" cy="${pt.y}" r="4.5" fill="#C4481A"/>
+    <circle cx="${pt.x}" cy="${pt.y}" r="7" fill="none" stroke="#C4481A" stroke-width="1"/>
+    <text x="${pt.x + dx}" y="${pt.y + dy}" font-family="'EB Garamond',serif"
+      font-size="9" fill="#2B1E12">${pt.label}</text>`;
+  }).join('\n');
+
+  return `
+  <svg viewBox="0 0 ${MAP_VIEWBOX.w} ${MAP_VIEWBOX.h}" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#C2AD90" stroke-width="0.6" opacity="0.45">
+      <line x1="0"  y1="15"  x2="45" y2="30"/>
+      <line x1="0"  y1="35"  x2="43" y2="52"/>
+      <line x1="0"  y1="57"  x2="40" y2="76"/>
+      <line x1="0"  y1="80"  x2="38" y2="100"/>
+      <line x1="0"  y1="104" x2="35" y2="126"/>
+      <line x1="0"  y1="128" x2="33" y2="152"/>
+      <line x1="0"  y1="154" x2="30" y2="178"/>
+    </g>
+    <text x="108" y="198" font-family="system-ui,sans-serif" font-size="7"
+          letter-spacing="3" fill="#7B6248" opacity="0.5">CALIFORNIA</text>
+    ${pathsHTML}
+    ${stopsHTML}
+    ${legLabelsHTML}
+    <g transform="translate(16,192)">
+      <line x1="0" y1="0" x2="18" y2="0" stroke="#2B1E12" stroke-width="1.5"/>
+      <text x="22" y="3.5" font-family="system-ui,sans-serif" font-size="6"
+            letter-spacing="1" fill="#2B1E12">HIGHWAY</text>
+      <line x1="70" y1="0" x2="88" y2="0" stroke="#2B1E12" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <text x="92" y="3.5" font-family="system-ui,sans-serif" font-size="6"
+            letter-spacing="1" fill="#2B1E12">SCENIC</text>
+    </g>
+  </svg>`;
+}
+
+// Renders one stacked mini-map per entry in d.route.routes
+function buildRouteMaps(d) {
+  const graph = d.route;
+  if (!graph || !graph.routes || !graph.routes.length) return '';
+
+  const items = graph.routes.map(route => `
+    <div class="route-map-item">
+      <div class="route-map-title">${route.title}</div>
+      ${buildRouteMapSVG(route, graph)}
+    </div>`).join('');
+
+  return `<div class="route-maps">${items}</div>`;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Page 1 — Overview
+────────────────────────────────────────────────────────── */
+function buildPage1(d) {
+  const t = d.trip;
+
+  const highlights = t.highlights.map((h, i) => `
+    ${i > 0 ? '<hr class="rule">' : ''}
+    <div class="hi-item">${h}</div>
+  `).join('');
+
+  return `
+  <div class="page page-overview">
+
+    <!-- Stripe -->
+    <div class="stripe">
+      <div class="stripe-rule"></div>
+      <div class="stripe-text">${d.meta.organization}</div>
+      <div class="stripe-rule"></div>
+    </div>
+
+    <!-- Top: title left, highlights right -->
+    <div class="overview-top">
+      <div class="ov-left">
+        <div class="display-title">${t.title}</div>
+        <p class="intro-text">${t.intro}</p>
+      </div>
+      <div class="ov-right">
+        <div class="trip-meta">
+          ${t.duration}<span class="pipe">|</span>${t.groupSize}
+        </div>
+        <div class="trip-dates">${t.dates}</div>
+        <div class="hi-header">
+          <span class="hi-icon">✦</span>
+          <span class="hi-label">Highlights</span>
+        </div>
+        ${highlights}
+      </div>
+    </div>
+
+    <!-- Bottom: photo left, map right -->
+    <div class="overview-bottom">
+      <img class="ov-photo"
+           src="${t.photos.hero}"
+           alt="${t.photos.heroCaption || t.title}"
+           onerror="this.style.background='#D8CFC4';this.removeAttribute('src')">
+      <div class="map-wrap">
+        <div class="map-kicker kicker">Route Map</div>
+        ${buildRouteMaps(d)}
+      </div>
+    </div>
+
+  </div>`;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Shared itinerary helpers
+────────────────────────────────────────────────────────── */
+function renderStop(stop, isFirst) {
+  let extras = '';
+  if (stop.note) {
+    extras += `<div class="stop-note">${stop.note}</div>`;
+  }
+  if (stop.accommodation) {
+    extras += `
+      <div class="accomm-line">
+        <span class="accomm-icon">⬤</span>
+        <span class="accomm-text">${stop.accommodation}</span>
+      </div>`;
+  }
+  if (stop.activity) {
+    const a = stop.activity;
+    extras += `
+      <div class="activity-stats">
+        <div><div class="stat-label">Distance</div><div class="stat-value">${a.distance}</div></div>
+        <div><div class="stat-label">Elev. Gain</div><div class="stat-value">${a.elevation}</div></div>
+        <div><div class="stat-label">Difficulty</div><div class="stat-value">${a.difficulty}</div></div>
+      </div>`;
+  }
+  return `
+    <div class="stop-block">
+      ${!isFirst ? '<hr class="rule">' : ''}
+      <div class="stop-title">${stop.title}</div>
+      <div class="stop-subtitle">${stop.subtitle}</div>
+      <div class="stop-text">${stop.description}</div>
+      ${extras}
+    </div>`;
+}
+
+/* ──────────────────────────────────────────────────────────
+   Itinerary day pages — one page per entry in d.days, however
+   many there are.
+
+   Sidebar content is entirely data-driven and the names are
+   arbitrary — a day's `sidebar` array just lists top-level JSON
+   keys to pull in and render as a sidebar block:
+
+     "accommodation": { "name": "Outside Inn", "tagline": "...", "intro": "...", "description": "...", "photo": "..." },
+     "restaurants_1": [
+       { "name": "...", "tagline": "...", "meal": "Breakfast · Day 2", "description": "...", "signature": [...], "photo": null }
+     ],
+     "days": [
+       { "sidebar": ["accommodation"], ... },
+       { "sidebar": [{ "name": "restaurants_1", "title": "Where You'll Eat", "intro": "..." }], ... }
+     ]
+
+   A bare string just looks the key up and titles the section from
+   the key name; an object ({ name, title, intro }) lets you override
+   the title/intro when the auto-generated one isn't right. Nothing
+   is inferred from day position, and no code change is needed to
+   add a new one — it's all just names pointing at data.
+────────────────────────────────────────────────────────── */
+const DAY_ORDINALS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+function dayOrdinal(n) { return DAY_ORDINALS[n] || String(n); }
+
+// "restaurants_1" -> "Restaurants", "harbor_tips" -> "Harbor Tips"
+function prettifyBlockName(name) {
+  const cleaned = name.replace(/_\d+$/, '').replace(/[_-]+/g, ' ').trim();
+  return cleaned ? cleaned.replace(/\b\w/g, c => c.toUpperCase()) : name;
+}
+
+function renderSidebarProperty(p, isFirst) {
+  const photo = p.photo
+    ? `<img class="prop-photo" src="${p.photo}" alt="${p.name || ''}"
+            onerror="this.style.background='#D8CFC4';this.removeAttribute('src')">`
+    : '';
+  const tagline = [p.tagline, p.meal].filter(Boolean).join('  ·  ');
+  const sig = p.signature ? `<div class="prop-signature">${p.signature.slice(0, 3).join(' · ')}</div>` : '';
+  return `
+    <div class="property">
+      ${!isFirst ? '<hr class="rule">' : ''}
+      ${p.name ? `<div class="prop-name">${p.name}</div>` : ''}
+      ${tagline ? `<span class="prop-tagline">${tagline}</span>` : ''}
+      ${p.description ? `<div class="prop-text">${p.description}</div>` : ''}
+      ${sig}
+      ${photo}
+    </div>`;
+}
+
+// `spec` is either a bare name ("accommodation") or an override object
+// ({ name, title, intro }). Either way `name` is just a lookup key into
+// the top-level trip JSON -- the code attaches no meaning to it.
+function renderSidebarBlock(d, spec) {
+  const name = typeof spec === 'string' ? spec : spec.name;
+  const raw  = d[name];
+  if (!raw) return '';
+
+  const items = Array.isArray(raw) ? raw : [raw];
+  if (!items.length) return '';
+
+  const title = (typeof spec === 'object' && spec.title) || prettifyBlockName(name);
+  const intro = (typeof spec === 'object' && spec.intro) || items[0].intro || '';
+  const propertiesHTML = items.map((p, i) => renderSidebarProperty(p, i === 0)).join('');
+
+  return `
+    <div class="sidebar-header">
+      <span class="sidebar-icon">⬤</span>
+      <span class="sidebar-title">${title}</span>
+    </div>
+    ${intro ? `<div class="sidebar-intro">${intro}</div>` : ''}
+    ${propertiesHTML}`;
+}
+
+function buildDayPage(d, day, { showCTA, photos }) {
+  const c = d.meta.contact;
+  const stopsHTML = day.stops.map((s, i) => renderStop(s, i === 0)).join('');
+
+  const photosHTML = photos.map((p, i) => `
+    <img class="col-photo-img" style="height:${p.height || '3.4in'};"
+         src="${p.src}"
+         alt="${p.caption}"
+         onerror="this.style.background='#D8CFC4';this.removeAttribute('src')">
+    <p class="photo-caption">${p.caption}</p>`).join('');
+
+  const ctaHTML = showCTA ? `
+    <div class="ready-box">
+      <div class="ready-title">Ready<br>to Go?</div>
+      <div class="ready-body">Reach out with any questions about this itinerary.</div>
+      <div class="ready-contact">${c.name}<br>${c.phone}<br>${c.email}</div>
+    </div>` : '';
+
+  const sidebarHTML = (day.sidebar || []).map(spec => renderSidebarBlock(d, spec)).join('');
+
+  return `
+  <div class="page">
+    <div class="stripe">
+      <div class="stripe-rule"></div>
+      <div class="stripe-text">${d.trip.subtitle}</div>
+      <div class="stripe-rule"></div>
+    </div>
+
+    <div class="itin-body">
+
+      <div class="col-days">
+        <div class="day-pg-heading">
+          <div class="day-pg-num">Day ${dayOrdinal(day.number)}</div>
+          <div class="day-pg-date">${day.date}</div>
+        </div>
+        <hr class="rule" style="margin-bottom:0.13in">
+        ${stopsHTML}
+      </div>
+
+      <div class="col-photos">
+        ${photosHTML}
+        ${ctaHTML}
+      </div>
+
+      <div class="col-sidebar">
+        ${sidebarHTML}
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function buildItineraryPages(d) {
+  const days = d.days;
+  const photos = d.trip.photos;
+  const heroCaption      = photos.heroCaption || d.trip.title;
+  const secondaryCaption = photos.secondaryCaption || d.trip.title;
+
+  return days.map((day, i) => {
+    const isFirst = i === 0;
+    const isLast  = i === days.length - 1;
+
+    // Each day can pick its own photo(s) explicitly (day.photos in the
+    // JSON) so the image actually matches that day's content. Trips that
+    // don't set it fall back to alternating the two trip-level photos.
+    const dayPhotos = day.photos || (isLast
+      ? [
+          { src: photos.hero,      caption: heroCaption,      height: '3.0in' },
+          { src: photos.secondary, caption: secondaryCaption, height: '2.6in' }
+        ]
+      : [
+          { src: i % 2 === 0 ? photos.secondary : photos.hero,
+            caption: i % 2 === 0 ? secondaryCaption : heroCaption,
+            height: '3.4in' }
+        ]);
+
+    return buildDayPage(d, day, { showCTA: isFirst, photos: dayPhotos });
+  }).join('');
+}
+
+/* ──────────────────────────────────────────────────────────
+   Pagination — spills overflowing stops onto a new page
+────────────────────────────────────────────────────────── */
+function makeContinuationPage(sourcePage) {
+  const stripeText = sourcePage.querySelector('.stripe-text').textContent;
+  const div = document.createElement('div');
+  div.className = 'page page-cont';
+  div.dataset.cont = '1';
+  div.innerHTML = `
+    <div class="stripe">
+      <div class="stripe-rule"></div>
+      <div class="stripe-text">${stripeText}</div>
+      <div class="stripe-rule"></div>
+    </div>
+    <div class="itin-body">
+      <div class="col-days"></div>
+      <div class="col-photos"></div>
+      <div class="col-sidebar"></div>
+    </div>`;
+  return div;
+}
+
+function paginateItinerary() {
+  // Loop until no col-days overflows its container
+  let changed = true;
+  let guard = 0;
+  while (changed && guard++ < 100) {
+    changed = false;
+    document.querySelectorAll('.col-days').forEach(col => {
+      if (col.scrollHeight <= col.clientHeight + 4) return;
+
+      const stops = [...col.querySelectorAll(':scope > .stop-block')];
+      if (stops.length <= 1) return; // can't split a single stop
+
+      changed = true;
+
+      // Pop the last stop and send it to (or create) the continuation page
+      const toMove = stops[stops.length - 1];
+      col.removeChild(toMove);
+
+      const page = col.closest('.page');
+      let next = page.nextElementSibling;
+      if (!next || !next.dataset.cont) {
+        next = makeContinuationPage(page);
+        page.after(next);
+      }
+
+      const nextCol = next.querySelector('.col-days');
+      nextCol.insertBefore(toMove, nextCol.firstChild);
+    });
+  }
+
+  // Remove leading rules from the first stop on each page (looks odd at top of col)
+  document.querySelectorAll('.col-days').forEach(col => {
+    const first = col.querySelector(':scope > .stop-block:first-child > hr.rule');
+    if (first) first.remove();
+  });
+}
+
+/* ──────────────────────────────────────────────────────────
+   Render
+────────────────────────────────────────────────────────── */
+async function render(data) {
+  document.getElementById('brochure').innerHTML =
+    buildCoverPage(data) + buildPage1(data) + buildItineraryPages(data);
+
+  // Wait for fonts, then paginate once layout is stable
+  await document.fonts.ready;
+  requestAnimationFrame(() => requestAnimationFrame(paginateItinerary));
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const param = new URLSearchParams(window.location.search).get('data');
+  if (param) {
+    try {
+      const res = await fetch(param);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      render(await res.json());
+    } catch (err) {
+      document.getElementById('brochure').textContent = `Failed to load "${param}": ${err.message}`;
+    }
+  } else {
+    render(TRIP_DATA);
+  }
+});
+</script>
+</body>
+</html>
